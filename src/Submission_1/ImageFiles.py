@@ -20,6 +20,9 @@ class ImageFiles:
         self._added = []
         self._removed = []
 
+    def __str__(self) -> str:
+        return str(self._files)
+
     def reload_fs(self, path: str) -> None:
         # Recorre el directori especificat i actualitza la llista d'arxius PNG.
         # Detecta els arxius nous i els que s'han eliminat.
