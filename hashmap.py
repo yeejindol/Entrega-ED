@@ -33,9 +33,9 @@ class MyHashMap:
 
     def remove(self, key: int) -> None:
         j = self._hash_function(key)
-        if self._table[j] is not None and self._table[j][0] == key:
-            self._table[j] = None
-            self._n -= 1
+        self._bucket_remove(j, key)
+
+        return
 
     def __len__(self):
         return self._n
@@ -76,8 +76,20 @@ class MyHashMap:
         return -1
 
     def _bucket_remove(self, j, key):
-        pass
-        
+
+        bucket = self._table[j]
+
+        if bucket is None:
+            return -1
+
+        for i in range(len(bucket)):
+            if bucket[i][0] == key:
+                bucket.pop(i)
+                self._n -= 1
+                return
+
+                
+            
 
 
 
@@ -86,14 +98,14 @@ if __name__ == '__main__' :
     hm = MyHashMap()
     hm.put(40, 7)
     hm.put(14, 3)        # h(14) = h(40) = 1: ara NO dona error
-    hm.get(14)           # → 3
-    hm.get(40)           # → 7
-    hm.get(27)           # → -1  (27 també va a la posició 1, però no hi és)
+    print(hm.get(14))           # → 3
+    print(hm.get(40))           # → 7
+    print(hm.get(27))           # → -1  (27 també va a la posició 1, però no hi és)
     hm.put(14, 99)       # actualitza
-    hm.get(14)           # → 99
+    print(hm.get(14))           # → 99
     hm.remove(40)
-    hm.get(40)           # → -1
-    len(hm)              # → 1
+    print(hm.get(40))           # → -1
+    print(len(hm))              # → 1
 
     # Part 2
     hm = MyHashMap()
