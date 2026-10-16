@@ -112,5 +112,5 @@ if __name__ == '__main__' :
     for k in [23, 45, 16, 26, 40, 14, 5, 12, 9, 25]:
         hm.put(k, 10 * k)
     
-    len(hm._table)       # → 25  (ha redimensionat en inserir la 7a clau)
-    hm._table[0]         # → [[25, 250]]  (25 % 25 = 0)
+    print(len(hm._table))       # → 25  (ha redimensionat en inserir la 7a clau)
+    print(hm._table[0])         # → [[25, 250]]  (25 % 25 = 0)
