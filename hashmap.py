@@ -15,6 +15,7 @@ class MyHashMap:
     def put(self, key: int, value: int) -> None:
         j = self._hash_function(key)
         self._bucket_put(j, key, value)
+
         # if self._table[j] is None:             # posició lliure
         #     self._table[j] = [key, value]
         #     self._n += 1
@@ -22,14 +23,13 @@ class MyHashMap:
         #     self._table[j][1] = value
         # else:                                  # una altra clau: COL·LISIÓ
         #     raise KeyError(f"COL·LISIÓ: {key} amb {self._table[j][0]}")
+
         if self._n > len(self._table) // 2 :
             self._resize(2 * len(self._table) - 1)
 
     def get(self, key: int) -> int:
         j = self._hash_function(key)
-        if self._table[j] is not None and self._table[j][0] == key:
-            return self._table[j][1]
-        return -1
+        return self._bucket_get(j, key)
 
     def remove(self, key: int) -> None:
         j = self._hash_function(key)
@@ -49,7 +49,7 @@ class MyHashMap:
             if bucket is not None:
                 for item in bucket:
                     self.put(item[0], item[1])
-                    
+
                 
 
     def _bucket_put(self, j, key, value):
@@ -65,16 +65,15 @@ class MyHashMap:
         self._table[j].append([key, value])
         self._n += 1
 
-        # if self._table[j] is None:             # posició lliure
-        #     self._table[j] = []
-        #     self._n += 1
-        # elif self._table[j][0] == key:         # mateixa clau: actualitzem
-        #     self._table[j][1] = value
-        # else:                                  # una altra clau: COL·LISIÓ
-        #     raise KeyError(f"COL·LISIÓ: {key} amb {self._table[j][0]}")
-
     def _bucket_get(self, j, key):
-        pass
+        bucket = self._table[j]
+
+        if bucket is not None:
+            for item in bucket:
+                if item[0] == key:
+                    return item[1]
+
+        return -1
 
     def _bucket_remove(self, j, key):
         pass
