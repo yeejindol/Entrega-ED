@@ -20,14 +20,54 @@ class MyHashMap:
         return key % len(self._table)              # h(x) = x % m
 
     def put(self, key: int, value: int) -> None:
-        j = self._hash_function(key)
-        if self._table[j] is None:                 # posició lliure
-            self._table[j] = [key, value]
-            self._n += 1
-        elif self._table[j][0] == key:             # mateixa clau: actualitzem
-            self._table[j][1] = value
-        else:                                      # una altra clau: COL·LISIÓ
-            raise KeyError(f"COL·LISIÓ: {key} amb {self._table[j][0]}")
+
+        reminder = None
+
+        m = len(self._table)
+        start = self._hash_function(key)
+        
+        for i in range(m):
+
+            j = (start + i) % m
+            slot = self._table[j]
+
+            if slot[2] == OCUPAT:
+                if slot[0] == key:
+                    self._table[j][1] = value
+                    break
+                else:
+                    continue
+            elif slot[2] == ESBORRAT:
+                if reminder is None:
+                    reminder = j
+                continue
+            elif slot[2] == LLIURE:
+                if reminder is not None:
+                    self._table[reminder] = [key, value, OCUPAT]
+                else:
+                    self._table[j] = [key, value, OCUPAT]
+                self._n += 1
+                break
+        else:
+            if reminder is not None:
+                self._table[reminder] = [key, value, OCUPAT]
+                self._n += 1
+
+
+        if self._n > len(self._table) // 2:
+            self._resize(2*len(self._table)-1)
+
+
+
+
+        # j = self._hash_function(key)
+        # if self._table[j] is None:                 # posició lliure
+        #     self._table[j] = [key, value]
+        #     self._n += 1
+        # elif self._table[j][0] == key:             # mateixa clau: actualitzem
+        #     self._table[j][1] = value
+        # else:                                      # una altra clau: COL·LISIÓ
+        #     raise KeyError(f"COL·LISIÓ: {key} amb {self._table[j][0]}")
 
     def get(self, key: int) -> int:
 
@@ -42,9 +82,10 @@ class MyHashMap:
         # return -1
 
     def remove(self, key: int) -> None:
-        j = self._hash_function(key)
-        if self._table[j] is not None and self._table[j][0] == key:
-            self._table[j] = None
+        ubi = self._find(key)
+
+        if ubi is not None:
+            self._table[ubi] = [None, None, ESBORRAT]
             self._n -= 1
 
     def __len__(self):
