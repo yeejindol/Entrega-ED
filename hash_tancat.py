@@ -13,7 +13,9 @@ class MyHashMap:
     """
 
     def __init__(self, cap=13):
-        self._table = cap * [None, None, LLIURE]   # m posicions, inicialment buides
+        self._table = []
+        for i in range(cap):
+            self._table.append([None, None, LLIURE])   # m posicions, inicialment buides
         self._n = 0                                # nombre de claus desades
 
     def _hash_function(self, key):
@@ -98,11 +100,11 @@ class MyHashMap:
         for i in range(m):
             j = (start + i) % m
             slot = self._table[j]
-            if slot[2] is LLIURE :
+            if slot[2] == LLIURE :
                 return None
-            if slot[2] is ESBORRAT :
+            if slot[2] == ESBORRAT :
                 continue
-            if slot[2] is OCUPAT and key == slot[0]:
+            if slot[2] == OCUPAT and key == slot[0]:
                 return j
 
         return None
