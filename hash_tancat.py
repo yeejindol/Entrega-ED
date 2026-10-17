@@ -112,8 +112,16 @@ class MyHashMap:
     def _resize(self, c):
 
         old = self._table
-        self._table = c * [None, None, LLIURE]
+        self._table = []
+
+        for i in range(c):
+            self._table.append([None, None, LLIURE]) 
+
         self._n = 0
+
+        for i in old:
+            if i[2] == OCUPAT:
+                self.put(i[0],i[1])
 
 
 if __name__ == '__main__':
@@ -123,14 +131,14 @@ if __name__ == '__main__':
     hm.put(40, 7)
     hm.put(14, 3)        # h(14) = h(40) = 1: va a la posició 2
     hm.put(27, 1)        # h(27) = 1: va a la posició 3
-    hm._table[1:4]       # → [[40, 7, 'O'], [14, 3, 'O'], [27, 1, 'O']]
+    print(hm._table[1:4])       # → [[40, 7, 'O'], [14, 3, 'O'], [27, 1, 'O']]
     hm.remove(14)
-    hm._table[2]         # → [None, None, 'B']
-    hm.get(27)           # → 1   (salta la posició ESBORRAT 2)
-    hm.get(14)           # → -1
+    print(hm._table[2])         # → [None, None, 'B']
+    print(hm.get(27))           # → 1   (salta la posició ESBORRAT 2)
+    print(hm.get(14))           # → -1
     hm.put(53, 9)        # h(53) = 1: reutilitza la posició ESBORRAT 
-    hm._table[2]         # → [53, 9, 'O']
-    len(hm)              # → 3
+    print(hm._table[2])         # → [53, 9, 'O']
+    print(len(hm))              # → 3
 
     # Part 2
     hm = MyHashMap()
@@ -138,5 +146,5 @@ if __name__ == '__main__':
     for k in [23, 45, 16, 26, 40, 14, 5, 12, 9, 25]:
         hm.put(k, 10 * k)
     
-    len(hm._table)       # → 25  (ha redimensionat en inserir la 7a clau)
-    hm.get(25)           # → 250    
+    print(len(hm._table))       # → 25  (ha redimensionat en inserir la 7a clau)
+    print(hm.get(25))           # → 250    
